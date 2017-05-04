@@ -25,7 +25,10 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'task_id',
-            'project_id',
+            [
+                'attribute'=>'project_id',
+                'value'=>'project.project_name'
+            ],
             'task_name',
             'task_detail:ntext',
             'task_employee_number',

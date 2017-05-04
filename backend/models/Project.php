@@ -46,8 +46,8 @@ class Project extends \yii\db\ActiveRecord
        $projectStart = date($this->project_created_date);
        $deadline = date($this->project_deadline);
        
-       if($projectStart > $deadline){
-           $this->addError($attribute,"Project must be started before deadline");
+       if(strtotime($projectStart) > strtotime($deadline)){
+           $this->addError($attribute,"Project must be started before deadline. The deadline of the project ".$this->project_deadline);
        }
        
    }

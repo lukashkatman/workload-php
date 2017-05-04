@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'task_id',
-            'project_id',
+           'project.project_name',
             'task_name',
             'task_detail:ntext',
             'task_employee_number',
@@ -38,5 +38,5 @@ $this->params['breadcrumbs'][] = $this->title;
             'task_status',
         ],
     ]) ?>
-
+    <div><?= $userAssigned;?> / <?= $model->task_employee_number ?></div>
 </div>

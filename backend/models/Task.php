@@ -40,7 +40,7 @@ class Task extends \yii\db\ActiveRecord
             [['task_detail', 'task_status'], 'string'],
             [['task_created_date', 'task_deadline'], 'safe'],
         
-            //['task_created_date','checkProjectDate'],
+            ['task_created_date','checkProjectDate'],
             [ 'task_deadline', 'checkDate'],
             [['task_name'], 'string', 'max' => 200],
             [['project_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['project_id' => 'project_id']],
@@ -51,22 +51,22 @@ class Task extends \yii\db\ActiveRecord
     * Custom validation function -> checkDate
     */
     
-//   public function checkProjectDate($attribute,$param) {
-//       $project1 = new Project();
-//     $project = $project1->findOne($this->project_id);
-//      $projectDate = date($project->project_created_date);
-//       $taskDate = date($this->task_created_date);
-//       if($taskDate > $projectDate){
-//            $this->addError($attribute,"Task must be started after project");
-//       }
+   public function checkProjectDate($attribute,$param) {
+       $project = new Project();
+     $project = date($project->find()->where(["project_id"=>$this->project_id])->one()->project_created_date);
+   
+       $taskDate = date($this->task_created_date);
+       if(strtotime($taskDate) < strtotime($project)){
+            $this->addError($attribute,"Task must be started after project. The project starts at ".$project);
+       }
 //       
-  // }
+   }
    public function checkDate($attribute,$param) {
        $projectStart = date($this->task_created_date);
        $deadline = date($this->task_deadline);
        
-       if($projectStart > $deadline){
-           $this->addError($attribute,"Deadline cannot be before starting of task");
+       if(strtotime($projectStart) > strtotime($deadline)){
+           $this->addError($attribute,"Deadline cannot be before starting of task. Task starts by ".$this->task_created_date);
        }
        
    }

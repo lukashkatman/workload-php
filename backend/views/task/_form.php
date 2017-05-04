@@ -17,7 +17,7 @@ use kartik\date\DatePicker;
 
     <?= $form->field($model,'project_id')->dropDownList(
         ArrayHelper::map(Project::find()->select(['project_id','project_name'])->all(), 'project_id', 'project_name'),
-            ['prompt'=>"Select Project"]
+            ['prompt'=>"Select Project",'id'=>"projectID"]
             )?>
     
     
@@ -31,7 +31,7 @@ use kartik\date\DatePicker;
     <?= $form->field($model, 'task_created_date')->widget(
     DatePicker::className(), [
       'value' => date('Y-m-d'),
-	'options' => ['placeholder' => 'Select date ...'],
+	'options' => ['placeholder' => 'Select date ...', 'id'=>"taskCreated"],
 	'pluginOptions' => [
 		'format' => 'yyyy-m-d',
 		'todayHighlight' => true
@@ -42,7 +42,7 @@ use kartik\date\DatePicker;
 <?= $form->field($model, 'task_deadline')->widget(
     DatePicker::className(), [
       'value' => date('Y-m-d'),
-	'options' => ['placeholder' => 'Select date ...'],
+	'options' => ['placeholder' => 'Select date ...','id'=>"taskDeadLine"],
 	'pluginOptions' => [
 		'format' => 'yyyy-m-d',
 		'todayHighlight' => true
@@ -60,3 +60,41 @@ use kartik\date\DatePicker;
     <?php ActiveForm::end(); ?>
 
 </div>
+
+<?php
+$script = <<< JS
+        $(document).ready(function()
+        {
+            $(".field-taskCreated").hide();  //JavaScript part to react the page according to user's activity
+           $(".field-taskDeadLine").hide(); 
+         });
+           
+   
+   
+         
+
+        
+        $('#projectID').change
+            (
+                function() {
+                    var project = $('#projectID option:selected').val();
+                    if($.isNumeric(project))
+                        {
+                            $(".field-taskCreated").fadeIn();
+                   $(".field-taskDeadLine").fadeIn(); 
+
+                        }
+                    if(!$.isNumeric(project))
+                        {
+                            $(".field-taskCreated").fadeOut();
+                   $(".field-taskDeadLine").fadeOut(); 
+
+                        }
+                }
+            );
+      
+        
+      
+JS;
+$this->registerJs($script);
+?>

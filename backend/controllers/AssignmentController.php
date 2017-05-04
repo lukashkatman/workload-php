@@ -61,6 +61,12 @@ class AssignmentController extends Controller {
      */
     public function actionCreate() {
         $model = new TaskUsers();
+        
+        $response = Yii::$app->request;
+            if($response->isAjax && $model->load($_POST)){
+              Yii::$app->response->format='json';
+               return \yii\widgets\ActiveForm::validate($model);
+            }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->task_users_id]);
@@ -79,6 +85,12 @@ class AssignmentController extends Controller {
      */
     public function actionUpdate($id) {
         $model = $this->findModel($id);
+        
+        $response = Yii::$app->request;
+            if($response->isAjax && $model->load($_POST)){
+              Yii::$app->response->format='json';
+               return \yii\widgets\ActiveForm::validate($model);
+            }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->task_users_id]);

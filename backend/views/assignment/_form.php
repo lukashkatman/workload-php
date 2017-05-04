@@ -15,9 +15,9 @@ use kartik\date\DatePicker;
 
 <div class="task-users-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(["enableAjaxValidation"=>true]); ?>
 
-    <?= $form->field($model, 'task_users_id')->textInput() ?>
+    
 
     <?= $form->field($model,'project_id')->dropDownList(
         ArrayHelper::map(Project::find()->select(['project_id','project_name'])->all(), 'project_id', 'project_name'),

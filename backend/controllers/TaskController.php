@@ -49,10 +49,27 @@ class TaskController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id)
-    {
+    public function actionView($id)    
+    { 
+        //fetch the data of users and check if they are assigned to the task or not, as a result provides the number of user who are 
+        //assigned to the task
+        $task = new \backend\models\TaskUsers();
+        $users = new \common\models\User();
+         
+        $count = 0;
+        foreach($users->find()->all() as $user){
+         $countUser = $task->find()->where(['task_id'=>$id,'user_id'=>$user->id])->one();
+         if(!empty($countUser)){
+             $count++;
+         }
+        }
+        
+       
+        
+       // $countUser = $task->find()->where(['task_id'=>$id]);
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'userAssigned' =>$count      //this here saves the number of users
         ]);
     }
 
