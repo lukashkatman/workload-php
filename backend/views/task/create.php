@@ -19,3 +19,42 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
 </div>
+
+
+<?php
+$script = <<< JS
+        $(document).ready(function()
+        {
+            $(".field-taskCreated").hide();  //JavaScript part to react the page according to user's activity
+           $(".field-taskDeadLine").hide(); 
+         });
+           
+   
+   
+         
+
+        
+        $('#projectID').change
+            (
+                function() {
+                    var project = $('#projectID option:selected').val();
+                    if($.isNumeric(project))
+                        {
+                            $(".field-taskCreated").fadeIn();
+                   $(".field-taskDeadLine").fadeIn(); 
+
+                        }
+                    if(!$.isNumeric(project))
+                        {
+                            $(".field-taskCreated").fadeOut();
+                   $(".field-taskDeadLine").fadeOut(); 
+
+                        }
+                }
+            );
+      
+        
+      
+JS;
+$this->registerJs($script);
+?>

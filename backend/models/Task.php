@@ -81,7 +81,7 @@ class Task extends \yii\db\ActiveRecord
             'project_id' => 'Project Name',
             'task_name' => 'Task Name',
             'task_detail' => 'Task Detail',
-            'task_employee_number' => 'Task Employee Number',
+            'task_employee_number' => 'Total Employee Quota',
             'task_created_date' => 'Task Starting Date',
             'task_deadline' => 'Task Deadline',
             'task_status' => 'Task Status',

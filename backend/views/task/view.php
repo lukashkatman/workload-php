@@ -6,7 +6,9 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Task */
 
-$this->title = $model->task_id;
+$this->title = $model->task_name;
+$this->params['breadcrumbs'][] = ['label' => 'Project', 'url' => ['project/index']];
+$this->params['breadcrumbs'][] = $model->project->project_name;
 $this->params['breadcrumbs'][] = ['label' => 'Tasks', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -14,6 +16,30 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
+  
+
+    <?= DetailView::widget([
+        'model' => $model,
+        'attributes' => [
+           
+           'project.project_name',
+            'task_name',
+            'task_detail:ntext',
+            [
+                'attribute'=>  'Total Employee Assigned',
+                'value'=> $userAssigned.'/'.$model->task_employee_number
+            ]
+           ,
+            'task_created_date',
+            'task_deadline',
+            [
+                'attribute'=>'task_status',
+                'value'=> $model->task_status.'% Complete'
+            ]
+           
+        ],
+    ]) ?>
+     
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->task_id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->task_id], [
@@ -24,19 +50,4 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
     </p>
-
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'task_id',
-           'project.project_name',
-            'task_name',
-            'task_detail:ntext',
-            'task_employee_number',
-            'task_created_date',
-            'task_deadline',
-            'task_status',
-        ],
-    ]) ?>
-    <div><?= $userAssigned;?> / <?= $model->task_employee_number ?></div>
 </div>

@@ -18,8 +18,8 @@ class TaskUsersSearch extends TaskUsers
     public function rules()
     {
         return [
-            ['task_users_id', 'integer'],
-            [['project_id', 'task_id', 'user_id','user_assigned_date'], 'safe'],
+           
+            [['user_assigned_date','task_id', 'user_id','project_id'], 'safe'],
         ];
     }
 
@@ -56,21 +56,21 @@ class TaskUsersSearch extends TaskUsers
             // $query->where('0=1');
             return $dataProvider;
         }
-$query->joinWith(["project","task","taskUsers"]);
+            
+        $query->joinWith(['task','project','user']);
         // grid filtering conditions
         $query->andFilterWhere([
             'task_users_id' => $this->task_users_id,
-//            'project_id' => $this->project_id,
-//            'task_id' => $this->task_id,
-//            'user_id' => $this->user_id,
-            'user_assigned_date' => $this->user_assigned_date,
+           
+            
+           
         ]);
-        
-         $query
-            ->andFilterWhere(['like', 'project.project_name', $this->project_id])
-            ->andFilterWhere(['like', 'task.task_name', $this->task_id])
-                  ->andFilterWhere(['like', 'taskUsers.username', $this->user_id]);
 
+        $query->andFilterWhere(['like', 'project.project_name', $this->project_id])
+                ->andFilterWhere(['like', 'task.task_name', $this->task_id])
+                ->andFilterWhere(['like', 'user_assigned_date', $this->user_assigned_date])
+                ->andFilterWhere(['like', 'user.username', $this->user_id]);
+        
         return $dataProvider;
     }
 }

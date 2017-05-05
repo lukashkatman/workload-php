@@ -29,9 +29,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'task_users_id',
-            'project_id',
-            'task_id',
-            'user_id',
+            'project.project_name',
+            'task.task_name',
+            'user.username',
             'user_assigned_date',
         ],
     ]) ?>

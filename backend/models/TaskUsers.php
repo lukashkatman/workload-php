@@ -16,7 +16,7 @@ use backend\models\Task;
  * @property string $user_assigned_date
  *
  * @property Project $project
- * @property User $taskUsers
+ * @property User $user
  * @property Task $task
  */
 class TaskUsers extends \yii\db\ActiveRecord
@@ -42,11 +42,11 @@ class TaskUsers extends \yii\db\ActiveRecord
             ['user_id', 'checkuser'],
             ['user_id', 'checkquota'],
             [['project_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['project_id' => 'project_id']],
-            [['task_users_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['task_users_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::className(), 'targetAttribute' => ['task_id' => 'task_id']],
         ];
     }
-    
+
     public function checkdate($attribute,$param) {
          $task = new Task();
      $task = $task->find()->where(["task_id"=>$this->task_id])->one();
@@ -72,9 +72,11 @@ class TaskUsers extends \yii\db\ActiveRecord
         $user = new TaskUsers();
         $task = $this->task_id;
         $userID = $this->user_id;
-        $user = $user->find()->where(["task_id"=>$task,"user_id"=>$userID])->all();
-        if(empty($user)){
-            $this->addError($arg,"This user has been already assigned");
+       $user = $user->find()->where(["task_id"=>$task,"user_id"=>$userID])->all();
+     
+
+        if(!empty($user)){
+           $this->addError($arg,"This user has been already assigned");
             
         }
     
@@ -113,7 +115,7 @@ class TaskUsers extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'task_users_id' => 'Task Users ID',
+            'task_users_id' => 'Assignment ID',
             'project_id' => 'Project',
             'task_id' => 'Task',
             'user_id' => 'User',
@@ -132,9 +134,9 @@ class TaskUsers extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTaskUsers()
+    public function getUser()
     {
-        return $this->hasOne(User::className(), ['id' => 'task_users_id']);
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
     /**

@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'task_users_id',
+            
             [
                 'attribute'=>'project_id',
                 'value'=>'project.project_name'
@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
              [
                 'attribute'=>'user_id',
-                'value'=>'taskUsers.username'
+                'value'=>'user.username'
             ],
             'user_assigned_date',
 
