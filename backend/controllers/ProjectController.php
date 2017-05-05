@@ -20,6 +20,18 @@ class ProjectController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' =>\yii\filters\AccessControl::className(),
+              
+                'rules' => [
+                    [
+                        'actions' => ['index','create','update','view','delete'],
+                        'allow' => true,
+                        'roles' => ['admin task'],
+                    ],
+
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

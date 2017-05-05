@@ -150,7 +150,12 @@ class SiteController extends Controller
     {
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post())) {
-            if ($user = $model->signup()) {
+            if ($user = $model->signup()) {      
+                $auth = \Yii::$app->authManager;         //to provide automatic employee role to new signup
+        $authorRole = $auth->getRole('employee task');
+     
+       $auth->assign($authorRole, $user->getId());
+
                 if (Yii::$app->getUser()->login($user)) {
                     return $this->goHome();
                 }
