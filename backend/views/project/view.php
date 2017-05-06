@@ -76,6 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <th>
                         Employees
                     </th>
+                    <th>Rewarded</th>
                 </tr>
 
                 <?php
@@ -97,6 +98,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <td>
                           <?= $task->task_employee_number ?>
                         </td>
+                        <td><?= ($task->task_reward==1)? "Yes":"No" ?></td>
                     </tr>
                     <?php
                 }

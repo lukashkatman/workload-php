@@ -35,7 +35,8 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute'=>'task_status',
                 'value'=> $model->task_status.'% Complete'
-            ]
+            ],
+            'task_reward'
            
         ],
     ]) ?>

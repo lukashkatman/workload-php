@@ -15,6 +15,9 @@ class TaskUsersSearch extends TaskUsers
     /**
      * @inheritdoc
      */
+    
+    public $task_created_date;
+      public $task_deadline;
     public function rules()
     {
         return [
@@ -39,7 +42,52 @@ class TaskUsersSearch extends TaskUsers
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function userTask($params ,$query)
+    {
+        
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+             'pagination' => [
+	    'pagesize' => 10,
+               
+    ],
+        ]);
+
+            
+        
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+            
+        $query->joinWith(['task','project','user']);
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'task_users_id' => $this->task_users_id,
+           
+            
+           
+        ]);
+
+        $query->andFilterWhere(['like', 'project.project_name', $this->project_id])
+                ->andFilterWhere(['like', 'task.task_name', $this->task_id])
+                ->andFilterWhere(['like', 'user_assigned_date', $this->user_assigned_date])
+                    ->andFilterWhere(['like', 'user_assigned_date', $this->user_assigned_date])
+                    ->andFilterWhere(['like', 'task.task_created_date', $this->task_created_date])
+                    ->andFilterWhere(['like', 'task.task_deadline', $this->task_deadline])
+                ->andFilterWhere(['like', 'user.username', $this->user_id]);
+        
+        
+        return $dataProvider;
+    }
+    
+     public function search($params)
     {
         $query = TaskUsers::find();
 
@@ -68,7 +116,7 @@ class TaskUsersSearch extends TaskUsers
 
         $query->andFilterWhere(['like', 'project.project_name', $this->project_id])
                 ->andFilterWhere(['like', 'task.task_name', $this->task_id])
-                ->andFilterWhere(['like', 'user_assigned_date', $this->user_assigned_date])
+                ->andFilterWhere(['like', 'task.task_created_date', $this->task_created_date])
                 ->andFilterWhere(['like', 'user.username', $this->user_id]);
         
         return $dataProvider;

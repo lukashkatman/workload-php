@@ -1,156 +1,132 @@
 <?php
 /* @var $this yii\web\View */
-?>
-<h1>profile/index</h1>
 
-<p>
-    You may change the content of this page by modifying
-    the file <code><?= __FILE__; ?></code>.
-</p>
+use yii\helpers\Html;
+use yii\grid\GridView;
+use yii\bootstrap\Modal;
+?>
+
 
 <div class="row">
     <div class="col-md-12">
-        <h2>My  Tasks</h2>
-        <table class="table">
-            <tr>
-                <th>Name</th>
-                <th>Status</th>
-                <th>Created Date</th>
-                <th>DeadLine</th>
-                <th>Assigned  Date</th>
-                <th>Update Status </th>
-            </tr>
-            <?php
-            foreach ($taskUser as $getTask):
-                echo "<tr>";
-                echo "<td>"
-                . $getTask->task->task_name
-                . "</td>"
-                . "<td>";
-                ?>
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" aria-valuenow="<?= $getTask->task->task_status ?>"
-                         aria-valuemin="0" aria-valuemax="100" style="width:<?= $getTask->task->task_status ?>%; 
-                         background-color:  <?php
-                         switch ($getTask->task->task_status) {
-                             case 25:
-                                 echo '#e01f1f';
-                                 break;
-                             case 50:
-                                 echo '#a3c510';
-                                 break;
-                             case 75:
-                                 echo '#11e8c8';
-                                 break;
-                             case 100:
-                                 echo '#1aea61';
-                                 break;
-                             default :
-                                 echo '#000';
-                                 break;
-                         }
-                         ?>
+        <h2>My Tasks</h2>
+ <?php 
+ //displaying the platform for an employee to update the task status
+         Modal::begin([
+            'header'=>'<h4>Update Task Status</h4>',
+            'id'=>'modal',
+            'size'=>'modal-lg',
+         ]);
 
-                         ;color:#000  ">
-                         <?php echo $getTask->task->task_status . '%' ?>
-                    </div>
-                </div>
-                <?php
-                echo "</td>"
-                . "<td>"
-                . $getTask->task->task_created_date
-                . "</td>"
-                . "<td>"
-                . $getTask->task->task_deadline
-                . "</td>"
-                . "<td>"
-                . $getTask->user_assigned_date
-                . "</td>";
-                ?>
-                <td>
-                   
-                    <button type="button" class="btn btn-primary" onclick="status('status<?= $getTask->task->task_id?>',<?= Yii::$app->user->getId()?>,<?= $getTask->task->task_id ?>,<?= $getTask->task->task_status ?>)"  >Update Status</button>
-                <!-- Model for status change -->
-<div class="modal fade status<?= $getTask->task->task_id?>" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-  <div class="modal-dialog modal-sm" role="document">
-    <div class="modal-content">
-     <?= $getTask->task->task_name?>
-        
-        <br/>
-        <?php
-                        if($getTask->task->task_status!=100){
-                            
-                        
-                            ?>
-                    <select id="status<?= $getTask->task->task_id?>"  >
-                       
-                        <option value="0" > 0 </option>
-                        <option value="25" > 25% </option>
-                        <option value="50" > 50% </option>
-                        <option value="75"> 75% </option>
-                        <option value="100"> 100% </option>
-                     
+        echo "<div id='modalContent'></div>";
+        Modal::end();
+        ?>
+        <?=
+        GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                [
+                    'attribute' => 'project_id',
+                    'value' => 'project.project_name'
+                ],
+                [
+                    'attribute' => 'task_id',
+                    'value' => 'task.task_name'
+                ],
+                'user_assigned_date',
+              
+                [
+                    'attribute' => 'Status',
+                    'value' => function($model) {
+                        return $model->task->task_status."%";
+                    },
+                    'contentOptions' =>
+                    function($model) {
+                        switch ($model->task->task_status) {
+                            case '25':
+                                return [
+                                    'class' => 'progress-bar',
+                                    'role' => "prariaogressbar",
+                                    ' aria-valuenow' => "25",
+                                    'aria-valuemin' => "0",
+                                    'aria-valuemax' => "100",
+                                    '  style' => "width:25%; background-color: #ffc107; color:#000"
+                                ];
+                                break;
+                            case '50':
+                                return [
+                                    'class' => 'progress-bar',
+                                    'role' => "prariaogressbar",
+                                    ' aria-valuenow' => "50",
+                                    'aria-valuemin' => "0",
+                                    'aria-valuemax' => "100",
+                                    '  style' => "width:50%; background-color: #35ccbe; color:#000"
+                                ];
+                                break;
+                            case '75':
+                                return [
+                                    'class' => 'progress-bar',
+                                    'role' => "prariaogressbar",
+                                    ' aria-valuenow' => "75",
+                                    'aria-valuemin' => "0",
+                                    'aria-valuemax' => "100",
+                                    '  style' => "width:75% ; background-color: #88e08c; color:#000"
+                                ];
+                                break;
+                            case '100':
+                                return [
+                                    'class' => 'progress-bar',
+                                    'role' => "prariaogressbar",
+                                    ' aria-valuenow' => "100",
+                                    'aria-valuemin' => "0",
+                                    'aria-valuemax' => "100",
+                                    '  style' => "width:100% ; background-color:#4caf50; color:#000"
+                                ];
+                                break;
+                            default :
+                                return [
+                                   
+                                    'style' => "width:1px  ; background-color:#fff; color:#ff5722"
+                                ];
 
-
-
-                    </select>
-                      <?php
-                        } 
-                        else{
-                            echo  '<a class="btn btn-success" id="claim">Claim</a>';
+                                break;
                         }
-                        
+                    }
+                        ],
+                        [
+                            'class' => 'yii\grid\ActionColumn',
+                            'contentOptions' => [],
+                            'header' => 'Actions',
+                            'template' => '{view}',
+                            'buttons' => [
+
+                                //view button
+                                'view' => function ($url, $model) {
+                                    return  
+                     
+                            Html::button('<span class="fa fa-search"></span>View',  [ 'value' =>  \yii\helpers\Url::toRoute(['profile/task','id'=>$model->task_id]), 'class' => 'btn btn-info btn-xs updateStatus'])
+                            ;
+                                },
+                            
+                                    ],
+                                    'urlCreator' => function ($action, $model, $key, $index) {
+                                if ($action === 'view') {
+                                  
+                  
+ 
+                                    $url = \yii\helpers\Url::toRoute(['profile/task', 'id' => $model->task_id]);
+                                
+                     
+ 
+                                    return $url;
+                                }
+                            }
+                                ],
+                            ],
+                        ]);
                         ?>
     </div>
-  </div>
 </div>
 
-                </td>
-                <?php
-                echo "</tr>";
-            endforeach;
-            ?>
-        </table>
-    </div>
-</div>
-
-
-<script>
-    function status(model,userID,taskID,taskStatus){
-        //alert(taskID+" "+userID+" "+model);
-        $('.'+model).modal('show');
-       }
-    </script>
-<?php
-$script = <<< JS
-     
-   function status(userID,taskID,taskStatus){
-        alert(taskID+" "+userID);
-       }
-         
-
-        
-        $('#projectID').change
-            (
-                function() {
-                    var project = $('#projectID option:selected').val();
-                    if($.isNumeric(project))
-                        {
-                            $(".field-taskCreated").fadeIn();
-                   $(".field-taskDeadLine").fadeIn(); 
-
-                        }
-                    if(!$.isNumeric(project))
-                        {
-                            $(".field-taskCreated").fadeOut();
-                   $(".field-taskDeadLine").fadeOut(); 
-
-                        }
-                }
-            );
-      
-        
-      
-JS;
-$this->registerJs($script);
-?>

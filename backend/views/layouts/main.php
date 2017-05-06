@@ -28,10 +28,10 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'My Company',
+        'brandLabel' => 'Work Load',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
+            'class' => 'navbar-default navbar-fixed-top',
         ],
     ]);
     $menuItems = [
@@ -40,6 +40,12 @@ AppAsset::register($this);
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else {
+        if (Yii::$app->user->can('admin task')) {
+        $menuItems[] = ['label' => 'Project', 'url' => ['/project/index']];
+              $menuItems[] = ['label' => 'Task', 'url' => ['/task/index']];
+        $menuItems[] = ['label' => 'Assignment', 'url' => ['/assignment/index']];
+
+        }
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
             . Html::submitButton(
