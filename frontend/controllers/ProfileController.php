@@ -1,12 +1,14 @@
 <?php
 
 namespace frontend\controllers;
+use yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\data\ActiveDataProvider;
 use backend\models\TaskUsersSearch;
 use backend\models\TaskUsers;
 use yii\web\NotFoundHttpException;
+use frontend\models\Email;
 
 class ProfileController extends \yii\web\Controller
 {
@@ -101,8 +103,13 @@ class ProfileController extends \yii\web\Controller
                 if($check->task_reward ==0){
                     $check->task_reward = 1;
                     if($check->save()){
+                        $user=Yii::$app->user->identity;
                         //use email funciton
-                        
+                       $email= new Email();
+                       $email->setBody(""
+                               . "Hello MR ".$user->firstname .",<br>"
+                               . "Here is your mail containing payslip for the task" .$check->task_name. "completed on" .date("Y-M-D"));
+                       $email->sendEmail($user->email);
                         return "You will receive an email attaching the payslip from your manager";
                         
                     }
